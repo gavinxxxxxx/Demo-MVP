@@ -1,4 +1,4 @@
-package com.gavin.demo301_mvvm.app;
+package com.gavin.demo301_mvvm.app.main;
 
 /**
  * 左侧菜单开关事件

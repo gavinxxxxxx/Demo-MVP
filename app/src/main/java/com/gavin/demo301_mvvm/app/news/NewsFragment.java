@@ -4,12 +4,13 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 
 import com.gavin.demo301_mvvm.R;
-import com.gavin.demo301_mvvm.app.DrawerToggleEvent;
+import com.gavin.demo301_mvvm.app.main.DrawerToggleEvent;
 import com.gavin.demo301_mvvm.base.BaseFragment;
 import com.gavin.demo301_mvvm.databinding.FragNewsBinding;
 import com.gavin.demo301_mvvm.model.TodayNews;
@@ -48,7 +49,7 @@ public class NewsFragment extends BaseFragment<FragNewsBinding> {
     @Override
     protected void afterCreate(@Nullable Bundle savedInstanceState) {
         initView();
-        getNews();
+        getTodayNews();
     }
 
     private void initView() {
@@ -65,9 +66,11 @@ public class NewsFragment extends BaseFragment<FragNewsBinding> {
         binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                getNews();
+                getTodayNews();
             }
         });
+        //为下拉刷新组件设置CircleProgress主色调
+        binding.refreshLayout.setColorSchemeColors(ContextCompat.getColor(_mActivity, R.color.textColorSecondary));
     }
 
     private ClientAPI getApi() {
@@ -86,7 +89,7 @@ public class NewsFragment extends BaseFragment<FragNewsBinding> {
         return retrofit.create(ClientAPI.class);
     }
 
-    private void getNews() {
+    private void getTodayNews() {
         getApi().getTodayNews()
                 .subscribeOn(Schedulers.io())
                 .doOnSubscribe(new Action0() {

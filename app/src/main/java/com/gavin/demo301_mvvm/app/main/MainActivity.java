@@ -1,4 +1,4 @@
-package com.gavin.demo301_mvvm.app;
+package com.gavin.demo301_mvvm.app.main;
 
 import android.os.Build;
 import android.os.Bundle;

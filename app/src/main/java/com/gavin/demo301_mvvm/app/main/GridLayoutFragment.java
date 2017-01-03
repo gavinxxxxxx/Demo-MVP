@@ -1,4 +1,4 @@
-package com.gavin.demo301_mvvm.app;
+package com.gavin.demo301_mvvm.app.main;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
