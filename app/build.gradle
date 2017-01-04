@@ -6,7 +6,7 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        applicationId "com.gavin.demo301_mvvm"
+        applicationId "com.gavin.mvvm"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
