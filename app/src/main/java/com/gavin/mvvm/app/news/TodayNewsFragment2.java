@@ -25,7 +25,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
  *
  * @author gavin.xiong 2016/12/28
  */
-public class TodayNewsFragment2 extends BindingFragment<FragNewsBinding> implements TodayNewsContract.View {
+public class TodayNewsFragment2 extends BindingFragment<FragNewsBinding>
+        implements TodayNewsContract.View, SwipeRefreshLayout.OnRefreshListener {
 
     private TodayNewsContract.Presenter mPresenter;
 
@@ -56,12 +57,7 @@ public class TodayNewsFragment2 extends BindingFragment<FragNewsBinding> impleme
         });
         binding.toolbar.setTitle("南淮小石子");
 
-        binding.refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mPresenter.loadTodayNews(true);
-            }
-        });
+        binding.refreshLayout.setOnRefreshListener(this);
         //为下拉刷新组件设置CircleProgress主色调
         binding.refreshLayout.setColorSchemeColors(ContextCompat.getColor(_mActivity, R.color.textColorSecondary));
     }
@@ -81,6 +77,11 @@ public class TodayNewsFragment2 extends BindingFragment<FragNewsBinding> impleme
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mPresenter.result(requestCode, resultCode);
+    }
+
+    @Override
+    public void onRefresh() {
+        mPresenter.loadTodayNews(true);
     }
 
     @Override
