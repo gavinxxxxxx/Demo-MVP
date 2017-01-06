@@ -13,15 +13,18 @@ import android.widget.TextView;
 
 import com.gavin.mvvm.R;
 import com.gavin.mvvm.app.base.BindingActivity;
+import com.gavin.mvvm.base.RxBus;
 import com.gavin.mvvm.databinding.ActMainBinding;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-
 import me.yokeyword.fragmentation.SupportFragment;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 public class MainActivity extends BindingActivity<ActMainBinding>
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private Subscription rxSubscription;
 
     @Override
     protected int getLayoutId() {
@@ -30,7 +33,7 @@ public class MainActivity extends BindingActivity<ActMainBinding>
 
     @Override
     protected void afterCreate(@Nullable Bundle savedInstanceState) {
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
 
         // 状态栏深色图标
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -43,6 +46,7 @@ public class MainActivity extends BindingActivity<ActMainBinding>
         }
 
         initNavigationView();
+        subscribeDrawerToggleEvent();
     }
 
     /**
@@ -57,6 +61,24 @@ public class MainActivity extends BindingActivity<ActMainBinding>
         textView2.setText("提示信息");
         SwitchCompat switchCompat = (SwitchCompat) binding.navigation.getMenu().findItem(R.id.nav_switch).getActionView();
         switchCompat.setChecked(true);
+    }
+
+    /**
+     * 订阅侧滑菜单开关事件（用 RxBus 替代 EventBus）
+     */
+    private void subscribeDrawerToggleEvent() {
+        rxSubscription = RxBus.getDefault().toObservable(DrawerToggleEvent.class)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<DrawerToggleEvent>() {
+                    @Override
+                    public void call(DrawerToggleEvent event) {
+                        if (event.open && !binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                            binding.drawer.openDrawer(GravityCompat.START);
+                        } else if (!event.open && binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                            binding.drawer.closeDrawer(GravityCompat.START);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -105,19 +127,10 @@ public class MainActivity extends BindingActivity<ActMainBinding>
 
     @Override
     protected void onDestroy() {
-        EventBus.getDefault().unregister(this);
+        if (rxSubscription != null && !rxSubscription.isUnsubscribed()) {
+            rxSubscription.unsubscribe();
+        }
         super.onDestroy();
     }
 
-    /**
-     * 左侧菜单开关
-     */
-    @Subscribe
-    public void OnDrawerToggle(DrawerToggleEvent event) {
-        if (event.open && !binding.drawer.isDrawerOpen(GravityCompat.START)) {
-            binding.drawer.openDrawer(GravityCompat.START);
-        } else if (!event.open && binding.drawer.isDrawerOpen(GravityCompat.START)) {
-            binding.drawer.closeDrawer(GravityCompat.START);
-        }
-    }
 }

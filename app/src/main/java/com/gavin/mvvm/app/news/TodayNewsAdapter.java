@@ -8,14 +8,13 @@ import com.gavin.mvvm.app.base.RecyclerAdapter;
 import com.gavin.mvvm.app.base.RecyclerHolder;
 import com.gavin.mvvm.databinding.ItemTestBinding;
 import com.gavin.mvvm.model.TodayNews;
-import com.gavin.mvvm.utils.L;
 
 import java.util.List;
 
 /**
  * 这里是萌萌哒注释君
  *
- * @author gavin.xiong 2016/12/9  2016/12/9
+ * @author gavin.xiong 2017/1/6
  */
 public class TodayNewsAdapter extends RecyclerAdapter<TodayNews.Story, ItemTestBinding> {
 

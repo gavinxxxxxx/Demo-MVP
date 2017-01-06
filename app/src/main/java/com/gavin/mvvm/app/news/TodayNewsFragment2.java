@@ -13,10 +13,9 @@ import android.view.View;
 import com.gavin.mvvm.R;
 import com.gavin.mvvm.app.base.BindingFragment;
 import com.gavin.mvvm.app.main.DrawerToggleEvent;
+import com.gavin.mvvm.base.RxBus;
 import com.gavin.mvvm.databinding.FragNewsBinding;
 import com.gavin.mvvm.model.TodayNews;
-
-import org.greenrobot.eventbus.EventBus;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -52,7 +51,7 @@ public class TodayNewsFragment2 extends BindingFragment<FragNewsBinding>
         binding.toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new DrawerToggleEvent(true));
+                RxBus.getDefault().post(new DrawerToggleEvent(true));
             }
         });
         binding.toolbar.setTitle("南淮小石子");
